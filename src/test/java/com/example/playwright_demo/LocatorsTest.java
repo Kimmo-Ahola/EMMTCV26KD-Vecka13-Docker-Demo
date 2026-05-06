@@ -1,5 +1,6 @@
 package com.example.playwright_demo;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import org.junit.jupiter.api.Test;
@@ -24,17 +25,18 @@ public class LocatorsTest extends BasePlaywrightTest {
 
         assertThat(page.getByAltText("avatar")).isVisible();
 
-        assertThat(page.getByTitle("Reload")).isVisible();
+        assertThat(page.getByTitle("Refresh Content")).isVisible();
         assertThat(page.getByTitle("Settings")).isVisible();
 
-        assertThat(page.getByTestId("status")).isVisible();
-        assertThat(page.getByTestId("status")).containsText("All systems operational");
+        assertThat(page.getByTestId("status-message")).isVisible();
+        assertThat(page.getByTestId("status-message")).containsText("All systems operational");
 
-        assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("This is a legacy CSS target"))).isVisible();
+        assertThat(page.locator("span").filter(
+                new Locator.FilterOptions().setHasText("This is a legacy CSS target"))).isVisible();
 
         assertThat(page.locator("//li[contains(., 'Task 1')]")).isVisible();
 
-        assertThat(page.locator("table").locator("tr").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Headphones"))).isVisible();
-        assertThat(page.locator("table").locator("tr").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Keyboard"))).isVisible();
+        assertThat(page.locator("table").locator("tr").filter(new Locator.FilterOptions().setHasText("Headphones"))).isVisible();
+        assertThat(page.locator("table").locator("tr").filter(new Locator.FilterOptions().setHasText("Keyboard"))).isVisible();
     }
 }
