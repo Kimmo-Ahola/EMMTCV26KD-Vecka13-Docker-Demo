@@ -21,6 +21,7 @@ public class InputTest extends BasePlaywrightTest {
         password.fill("SuperSecret!");
         date.fill("2026-01-21");
 
+        assertThat(number).hasValue("1337");
         assertEquals("1337", number.inputValue());
         assertEquals("hello playwright", text.inputValue());
         assertEquals("SuperSecret!", password.inputValue());
