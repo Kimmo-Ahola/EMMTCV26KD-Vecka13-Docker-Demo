@@ -13,6 +13,7 @@ COPY . .
 
 RUN chmod +x mvnw
 
+
 # Bygger vår Spring Boot applikation
 # - kompilerar kod
 # - skapar en körbar JAR-fil
