@@ -11,12 +11,10 @@ public class BasePlaywrightTest {
 
     @BeforeAll
     static void beforeAll() {
-        boolean ci = System.getenv("CI") != null;
-
         playwright = Playwright.create();
         browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
-                        .setHeadless(ci)
+                        .setHeadless(false)
         );
     }
 
