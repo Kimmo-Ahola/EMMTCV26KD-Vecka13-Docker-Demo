@@ -1,5 +1,6 @@
 # Vi hämtar en basimage från Docker Hub
 # Detta är en färdig Linux-miljö med Java 21 installerat
+# samt playwright browsers
 FROM mcr.microsoft.com/playwright/java:v1.59.0-noble
 
 # Sätter arbetskatalogen inne i containern
@@ -11,6 +12,7 @@ WORKDIR /app
 # copy . . betyder "kopiera allt från current folder på MIN DATOR till current folder I CONTAINER"
 COPY . .
 
+# vi gör maven wrapper exekverbar för säkerhets skull
 RUN chmod +x mvnw
 
 
@@ -33,3 +35,6 @@ EXPOSE 8080
 # -jar eeftersom spring boot skapar en jar-fil
 # i python är den tex CMD ["python", "app.py"] ingen byggfil eftersom python är ett scriptspråk
 CMD ["java", "-jar", "target/playwright-demo-0.0.1-SNAPSHOT.jar"]
+
+#OBS!! Denna image är för testning. Inte för deployment! Eftersom vi här har playwright installerat tar det upp extra
+# plats. Denna ska alltså endast användas för testning i CI-miljö
