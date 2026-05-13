@@ -1,35 +1,52 @@
-name: Java Playwright CI
+name: Playwright Tests (Docker)
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 21
+      # Start your Spring Boot app from Docker Hub
+      - name: Start Spring Boot app (from Docker Hub)
+        run: |
+          docker run -d \
+            --name app \
+            -p 8080:8080 \
+            kimmoahola/ec-docker-demo:latest
+
+      # Install Node (needed for wait-on)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Wait until app is reachable
+      - name: Wait for app
+        run: |
+          npm install -g wait-on
+          wait-on http://localhost:8080 --timeout 60000
+
+      # Set up Java for Playwright + Maven tests
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: maven
+          distribution: temurin
+          java-version: 21
 
-      - name: Install Playwright browsers
-        run: mvn -q -DskipTests exec:java -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install --with-deps"
+
+      - name: Make mvnw executable
+        run: chmod +x mvnw
 
       - name: Run tests
-        env:
-          CI: true
-        run: mvn -B test
+        run: ./mvnw test
 
-      - name: Test Summary
-        uses: test-summary/action@v2
-        with:
-          paths: "target/surefire-reports/*.xml"
+      # Cleanup (important but often skipped)
+      - name: Stop container
         if: always()
+        run: docker stop app && docker rm app
