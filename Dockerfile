@@ -1,6 +1,6 @@
 # Vi hämtar en basimage från Docker Hub
 # Detta är en färdig Linux-miljö med Java 21 installerat
-FROM eclipse-temurin:21-jdk
+FROM mcr.microsoft.com/playwright/java:v1.59.1
 
 # Sätter arbetskatalogen inne i containern
 # Allt vi kopierar in hamnar här
