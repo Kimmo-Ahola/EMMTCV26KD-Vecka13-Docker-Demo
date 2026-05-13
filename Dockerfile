@@ -13,11 +13,6 @@ COPY . .
 
 RUN chmod +x mvnw
 
-# Install playwright to image + dependencies
-RUN ./mvnw exec:java \
-    -Dexec.mainClass=com.microsoft.playwright.CLI \
-    -Dexec.args="install --with-deps"
-
 # Bygger vår Spring Boot applikation
 # - kompilerar kod
 # - skapar en körbar JAR-fil
