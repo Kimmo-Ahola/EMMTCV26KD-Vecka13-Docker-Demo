@@ -1,6 +1,6 @@
 # Vi hämtar en basimage från Docker Hub
 # Detta är en färdig Linux-miljö med Java 21 installerat
-FROM mcr.microsoft.com/playwright/java:v1.59.1
+FROM mcr.microsoft.com/playwright/java:v1.59.0-noble
 
 # Sätter arbetskatalogen inne i containern
 # Allt vi kopierar in hamnar här
