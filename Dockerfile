@@ -11,6 +11,8 @@ WORKDIR /app
 # copy . . betyder "kopiera allt från current folder på MIN DATOR till current folder I CONTAINER"
 COPY . .
 
+RUN chmod +x mvnw
+
 # Bygger vår Spring Boot applikation
 # - kompilerar kod
 # - skapar en körbar JAR-fil
