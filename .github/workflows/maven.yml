@@ -43,6 +43,9 @@ jobs:
       - name: Make mvnw executable
         run: chmod +x mvnw
 
+      - name: Set BASE_URL
+        run: echo "BASE_URL=http://localhost:8080" >> $GITHUB_ENV
+
       - name: Run tests
         run: ./mvnw test
 

@@ -1,5 +1,6 @@
 package com.example.playwright_demo;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,43 +22,52 @@ public class PracticePageTest extends BasePlaywrightTest {
 
     @Test
     void shouldInteractWithPracticePage() {
-        // Heading
-        assertThat(page.locator("#page-title"))
-                .hasText("Playwright Test Page");
+        Locator heading = page.getByRole(
+                AriaRole.HEADING,
+                new Page.GetByRoleOptions().setName("Playwright Test Page")
+        );
+        assertThat(heading).isVisible();
 
-        // Fill email
-        page.getByPlaceholder("Email")
-                .fill("tester@example.com");
+        Locator email = page.getByPlaceholder("Email");
+        email.fill("tester@example.com");
+        assertThat(email).hasValue("tester@example.com");
 
-        // Button click
-        page.locator(".btn-green").click();
+        Locator button = page.getByRole(
+                AriaRole.BUTTON,
+                new Page.GetByRoleOptions().setName("Click Me")
+        );
+        button.click();
 
-        // Checkbox
-        page.getByLabel("Accept Terms").check();
+        Locator checkbox = page.getByRole(
+                AriaRole.CHECKBOX,
+                new Page.GetByRoleOptions().setName("Accept Terms")
+        );
+        checkbox.check();
+        assertThat(checkbox).isChecked();
 
-        // Radio button
-        page.getByLabel("Option B").check();
+        Locator radio = page.getByRole(
+                AriaRole.RADIO,
+                new Page.GetByRoleOptions().setName("Option B")
+        );
+        radio.check();
+        assertThat(radio).isChecked();
 
-        // Dropdown
-        page.locator("#color-select")
-                .selectOption("green");
+        Locator select = page.locator("#color-select");
+        select.selectOption("green");
+        assertThat(select).hasValue("green");
 
-        // List items
-        List<String> features =
-                page.locator(".feature").allTextContents();
+        Locator logo = page.getByRole(
+                AriaRole.IMG,
+                new Page.GetByRoleOptions().setName("company logo")
+        );
+        assertThat(logo).hasAttribute("alt", "Playwright Logo");
 
-        System.out.println(features);
+        Locator link = page.getByRole(
+                AriaRole.LINK,
+                new Page.GetByRoleOptions().setName("Learn more")
+        );
+        link.click();
 
-        // Image alt
-        String alt =
-                page.locator("#logo").getAttribute("alt");
-
-        System.out.println(alt);
-
-        // Link click
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Learn more")).click();
-
-        // Nested span
         assertThat(page.locator("#nested-span"))
                 .hasText("Nested Text");
     }
