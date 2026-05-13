@@ -13,6 +13,11 @@ COPY . .
 
 RUN chmod +x mvnw
 
+# Install playwright to image + dependencies
+RUN ./mvnw exec:java \
+    -Dexec.mainClass=com.microsoft.playwright.CLI \
+    -Dexec.args="install --with-deps"
+
 # Bygger vår Spring Boot applikation
 # - kompilerar kod
 # - skapar en körbar JAR-fil
@@ -30,5 +35,5 @@ EXPOSE 8080
 # Vi kör den färdiga JAR-filen (packaged Java application)
 # java = vi kör en java-applikation
 # -jar eeftersom spring boot skapar en jar-fil
-# i python är den text ENTRYPOINT ["python", "app.py"] ingen byggfil eftersom python är ett scriptspråk
-ENTRYPOINT ["java", "-jar", "target/playwright-demo-0.0.1-SNAPSHOT.jar"]
+# i python är den tex CMD ["python", "app.py"] ingen byggfil eftersom python är ett scriptspråk
+CMD ["java", "-jar", "target/playwright-demo-0.0.1-SNAPSHOT.jar"]

@@ -6,8 +6,6 @@ import com.microsoft.playwright.options.AriaRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class PracticePageTest extends BasePlaywrightTest {
@@ -17,7 +15,6 @@ public class PracticePageTest extends BasePlaywrightTest {
         if (baseUrl == null) baseUrl = "http://localhost:8080";
 
         page.navigate(baseUrl);
-        page.waitForURL(baseUrl);
     }
 
     @Test

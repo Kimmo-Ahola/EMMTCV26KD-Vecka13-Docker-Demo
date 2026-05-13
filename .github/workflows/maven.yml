@@ -11,58 +11,40 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-          
-      # 2. Log in to Docker Hub
+
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      # 3. Build image
       - name: Build Docker image
         run: |
           docker build -t kimmoahola/ec-docker-demo:latest .
 
-      # 4. Push image to Docker Hub
       - name: Push Docker image
         run: |
           docker push kimmoahola/ec-docker-demo:latest
 
-      # Start your Spring Boot app from Docker Hub
-      - name: Start Spring Boot app (from Docker Hub)
+      - name: Start Spring Boot app
         run: |
           docker run -d \
             --name app \
             -p 8080:8080 \
+            -e BASE_URL=http://localhost:8080 \
             kimmoahola/ec-docker-demo:latest
 
-      # Install Node (needed for wait-on)
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Wait until app is reachable
       - name: Wait for app
         run: |
           npm install -g wait-on
           wait-on http://localhost:8080 --timeout 60000
 
-      # Set up Java for Playwright + Maven tests
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
+      - name: Run Playwright tests inside container
+        run: |
+          docker exec app ./mvnw test
 
-
-      - name: Make mvnw executable
-        run: chmod +x mvnw
-
-      - name: Run tests
-        run: ./mvnw test
-        env:
-          BASE_URL: http://localhost:8080
-
-      # Cleanup (important but often skipped)
       - name: Stop container
         if: always()
         run: docker stop app && docker rm app
